@@ -13,7 +13,9 @@ function Modal({ onModal, children }) {
             }
         };
         window.addEventListener('keydown', handleKeyDown);
-        window.removeEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
     }, [onModal]);
 
     const handBackdropClick = e => {
