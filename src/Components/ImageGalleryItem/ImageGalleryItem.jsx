@@ -10,7 +10,7 @@ function ImageGalleryItem({
 }) {
     return (
         <>
-            <li className="ImageGalleryItem">
+            <li className={s.ImageGalleryItem}>
                 <img
                     onClick={() => {
                         onModal(image);

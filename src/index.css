@@ -20,6 +20,12 @@ body {
     background-color: #fff;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background: linear-gradient(
+        45deg,
+        rgb(152, 207, 195),
+        rgb(86, 181, 184),
+        rgb(237, 242, 208)
+    );
 }
 
 img {
