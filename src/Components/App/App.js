@@ -25,10 +25,7 @@ function App() {
         const fetchPixaBayImage = async () => {
             try {
                 const hits = await fetchPixaBayAPI(searchQuery, page);
-                setPixaBayImages(prevPixaBayImages => [
-                    ...prevPixaBayImages,
-                    ...hits,
-                ]);
+                setPixaBayImages(pixaBayImages => [...pixaBayImages, ...hits]);
                 if (page !== 1) {
                     scrollPageDown();
                 }
@@ -62,7 +59,7 @@ function App() {
     const handleFormSubmit = searchQuery => {
         setSearchQuery(searchQuery);
         setPage(page);
-        setPixaBayImages(setPixaBayImages);
+        setPixaBayImages([]);
     };
 
     const toggleModal = () => {
