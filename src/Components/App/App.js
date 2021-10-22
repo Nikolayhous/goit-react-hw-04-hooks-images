@@ -1,6 +1,6 @@
+import { useState, useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Component } from 'react';
 import fetchPixaBayAPI from '../../Services/searchPicturesAPI';
 import Container from '../Container';
 import Searchbar from '../Searchbar';
@@ -9,115 +9,103 @@ import LoaderSpinner from '../Loader';
 import Button from '../Button';
 import Modal from '../Modal';
 import Skeleton from '../Sceleton';
-import scrollPageDown from '../../scroll/scrolTo';
+import scrollPageDown from '../../scroll/scrollTo';
 
-class App extends Component {
-    state = {
-        page: 1,
-        searchQuery: '',
-        showModal: false,
-        loadingSpinner: false,
-        pixaBayImages: [],
-        largeImage: {},
+function App() {
+    const [page, setPage] = useState(1);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [showModal, setShowModal] = useState(false);
+    const [loadingSpinner, setLoadingSpinner] = useState(false);
+    const [pixaBayImages, setPixaBayImages] = useState([]);
+    const [largeImage, setLargeImage] = useState({});
+
+    useEffect(() => {
+        if (!searchQuery) return;
+        setLoadingSpinner(!loadingSpinner);
+        const fetchPixaBayImage = async () => {
+            try {
+                const hits = await fetchPixaBayAPI(searchQuery, page);
+                setPixaBayImages(prevPixaBayImages => [
+                    ...prevPixaBayImages,
+                    ...hits,
+                ]);
+                if (page !== 1) {
+                    scrollPageDown();
+                }
+            } catch (error) {
+                console.log(error.message);
+            } finally {
+                setLoadingSpinner(loadingSpinner);
+            }
+        };
+
+        fetchPixaBayImage();
+    }, [page, searchQuery, loadingSpinner]);
+
+    // fetchPixaBay = () => {
+    //     const { searchQuery, page } = this.state;
+    //     this.setState({ loadingSpinner: true });
+    //     return fetchPixaBayAPI(searchQuery, page).then(pixaBayImages => {
+    //         this.setState(prevState => ({
+    //             pixaBayImages: [...prevState.pixaBayImages, ...pixaBayImages],
+    //             page: prevState.page + 1,
+    //         }));
+    //     });
+    // };
+
+    const handleLoadMoreClick = () => {
+        setLoadingSpinner(!loadingSpinner);
+        setPage(prevPage => prevPage + 1);
+        setLoadingSpinner(loadingSpinner);
     };
 
-    componentDidUpdate(prevProps, prevState) {
-        const { searchQuery } = this.state;
-        if (searchQuery !== prevState.searchQuery) {
-            this.fetchPixaBay()
-                .catch(error => console.log(error))
-                .finally(() => this.setState({ loadingSpinner: false }));
-        }
-    }
-
-    fetchPixaBay = () => {
-        const { searchQuery, page } = this.state;
-        this.setState({ loadingSpinner: true });
-        return fetchPixaBayAPI(searchQuery, page).then(pixaBayImages => {
-            this.setState(prevState => ({
-                pixaBayImages: [...prevState.pixaBayImages, ...pixaBayImages],
-                page: prevState.page + 1,
-            }));
-        });
+    const handleFormSubmit = searchQuery => {
+        setSearchQuery(searchQuery);
+        setPage(page);
+        setPixaBayImages(setPixaBayImages);
     };
 
-    handleLoadMoreClick = () => {
-        this.setState({ loadingSpinner: true });
-        this.fetchPixaBay()
-            .then(() => {
-                scrollPageDown();
-            })
-            .catch(error => console.log(error))
-            .finally(() => this.setState({ loadingSpinner: false }));
+    const toggleModal = () => {
+        setShowModal(!showModal);
     };
 
-    handleFormSubmit = searchQuery => {
-        this.setState({
-            searchQuery,
-            page: 1,
-            pixaBayImages: [],
-        });
+    const clickImages = largeImage => {
+        setLargeImage(largeImage);
+        toggleModal();
     };
 
-    toggleModal = () => {
-        this.setState(({ showModal }) => ({
-            showModal: !showModal,
-        }));
-    };
+    return (
+        <>
+            <ToastContainer />
+            <Searchbar onSubmit={handleFormSubmit} />
+            <Container>
+                {pixaBayImages.length !== 0 ? (
+                    <ImageGallery
+                        onModal={clickImages}
+                        pixaBayImages={pixaBayImages}
+                    />
+                ) : (
+                    searchQuery !== '' && <Skeleton />
+                )}
 
-    ClickImages = largeImage => {
-        this.setState({ largeImage });
-        this.toggleModal();
-    };
+                {loadingSpinner && <LoaderSpinner />}
 
-    render() {
-        const {
-            showModal,
-            searchQuery,
-            pixaBayImages,
-            loadingSpinner,
-            largeImage,
-        } = this.state;
+                {pixaBayImages.length !== 0 && (
+                    <Button onClick={handleLoadMoreClick} />
+                )}
 
-        const {
-            toggleModal,
-            handleFormSubmit,
-            ClickImages,
-            handleLoadMoreClick,
-        } = this;
-        return (
-            <>
-                <ToastContainer />
-                <Searchbar onSubmit={handleFormSubmit} />
-                <Container>
-                    {pixaBayImages.length !== 0 ? (
-                        <ImageGallery
-                            onModal={ClickImages}
-                            pixaBayImages={pixaBayImages}
+                {showModal && (
+                    <Modal onModal={toggleModal}>
+                        {loadingSpinner && <LoaderSpinner />}
+                        <img
+                            src={largeImage.largeImageURL}
+                            alt={largeImage.tags}
                         />
-                    ) : (
-                        searchQuery !== '' && <Skeleton />
-                    )}
-
-                    {loadingSpinner && <LoaderSpinner />}
-
-                    {pixaBayImages.length !== 0 && (
-                        <Button onClick={handleLoadMoreClick} />
-                    )}
-
-                    {showModal && (
-                        <Modal onModal={toggleModal}>
-                            {loadingSpinner && <LoaderSpinner />}
-                            <img
-                                src={largeImage.largeImageURL}
-                                alt={largeImage.tags}
-                            />
-                        </Modal>
-                    )}
-                </Container>
-            </>
-        );
-    }
+                    </Modal>
+                )}
+            </Container>
+        </>
+    );
 }
 
 export default App;
