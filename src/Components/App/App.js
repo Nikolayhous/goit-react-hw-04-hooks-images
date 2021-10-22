@@ -10,6 +10,7 @@ import Button from '../Button';
 import Modal from '../Modal';
 import Skeleton from '../Sceleton';
 import scrollPageDown from '../../scroll/scrollTo';
+// import ScrollToButton from '../ButtonScrollTo';
 // import useToggle from '../../hooks/index';
 
 function App() {
@@ -36,20 +37,8 @@ function App() {
                 setLoadingSpinner(false);
             }
         };
-
         fetchPixaBayImage();
     }, [page, searchQuery]);
-
-    // fetchPixaBay = () => {
-    //     const { searchQuery, page } = this.state;
-    //     this.setState({ loadingSpinner: true });
-    //     return fetchPixaBayAPI(searchQuery, page).then(pixaBayImages => {
-    //         this.setState(prevState => ({
-    //             pixaBayImages: [...prevState.pixaBayImages, ...pixaBayImages],
-    //             page: prevState.page + 1,
-    //         }));
-    //     });
-    // };
 
     const handleLoadMoreClick = () => {
         setLoadingSpinner(!loadingSpinner);
