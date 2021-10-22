@@ -21,7 +21,7 @@ function App() {
 
     useEffect(() => {
         if (!searchQuery) return;
-        setLoadingSpinner(!loadingSpinner);
+        setLoadingSpinner(true);
         const fetchPixaBayImage = async () => {
             try {
                 const hits = await fetchPixaBayAPI(searchQuery, page);
@@ -32,12 +32,12 @@ function App() {
             } catch (error) {
                 console.log(error.message);
             } finally {
-                setLoadingSpinner(loadingSpinner);
+                setLoadingSpinner(false);
             }
         };
 
         fetchPixaBayImage();
-    }, [page, searchQuery, loadingSpinner]);
+    }, [page, searchQuery]);
 
     // fetchPixaBay = () => {
     //     const { searchQuery, page } = this.state;
