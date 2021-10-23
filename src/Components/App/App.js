@@ -9,7 +9,7 @@ import LoaderSpinner from '../Loader';
 import Button from '../Button';
 import Modal from '../Modal';
 import Skeleton from '../Sceleton';
-import scrollPageDown from '../../scroll/scrollTo';
+import scrollPageDown from '../../scrollDown/scrollDown';
 import ScrollToButton from '../ButtonScrollTo';
 import useToggle from '../../hooks/index';
 
