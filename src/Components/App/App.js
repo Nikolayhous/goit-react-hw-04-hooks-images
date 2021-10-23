@@ -10,7 +10,7 @@ import Button from '../Button';
 import Modal from '../Modal';
 import Skeleton from '../Sceleton';
 import scrollPageDown from '../../scroll/scrollTo';
-// import ScrollToButton from '../ButtonScrollTo';
+import ScrollToButton from '../ButtonScrollTo';
 import useToggle from '../../hooks/index';
 
 function App() {
@@ -21,6 +21,7 @@ function App() {
     const [loadingSpinner, setLoadingSpinner] = useState(false);
     const [pixaBayImages, setPixaBayImages] = useState([]);
     const [largeImage, setLargeImage] = useState({});
+    const [isActiveBtn, setIsActiveBtn] = useState(false);
 
     useEffect(() => {
         if (!searchQuery) return;
@@ -82,6 +83,9 @@ function App() {
                 {pixaBayImages.length !== 0 && (
                     <Button onClick={handleLoadMoreClick} />
                 )}
+
+                {isActiveBtn && <ScrollToButton />}
+                {pixaBayImages.length > 12 && <ScrollToButton />}
 
                 {showModal && (
                     <Modal onModal={setShowModal}>

@@ -9,8 +9,8 @@
     transition: all 0.5s ease-in-out;
     cursor: pointer;
     bottom: 100px;
-    right: 15px;
-    width: 40px;
+    right: 50px;
+    width: 60px;
 }
 
 .btnToTop img:hover {

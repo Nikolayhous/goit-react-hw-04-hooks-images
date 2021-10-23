@@ -1,21 +1,6 @@
-import { useState } from 'react';
 import s from './ButtonScrollTo.module.css';
 
 const ScrollToButton = () => {
-    const [active, setActive] = useState(false);
-
-    const onVisibleBtn = () => {
-        const scroll = window.pageYOffset;
-        const height = document.documentElement.clientHeight;
-        if (scroll > height) {
-            setActive(!active);
-        }
-        if (scroll < height) {
-            setActive(active);
-        }
-    };
-    window.addEventListener('scroll', onVisibleBtn);
-
     const onClickScrollTop = () => {
         window.scrollTo({
             top: 0,
