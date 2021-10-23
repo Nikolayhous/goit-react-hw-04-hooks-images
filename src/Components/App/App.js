@@ -11,12 +11,13 @@ import Modal from '../Modal';
 import Skeleton from '../Sceleton';
 import scrollPageDown from '../../scroll/scrollTo';
 // import ScrollToButton from '../ButtonScrollTo';
-// import useToggle from '../../hooks/index';
+import useToggle from '../../hooks/index';
 
 function App() {
     const [page, setPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState('');
-    const [showModal, setShowModal] = useState(false);
+    // const [showModal, setShowModal] = useState(false);
+    const [showModal, setShowModal] = useToggle(false);
     const [loadingSpinner, setLoadingSpinner] = useState(false);
     const [pixaBayImages, setPixaBayImages] = useState([]);
     const [largeImage, setLargeImage] = useState({});
@@ -52,13 +53,14 @@ function App() {
         setPixaBayImages([]);
     };
 
-    const toggleModal = () => {
-        setShowModal(!showModal);
-    };
+    // const toggleModal = () => {
+    //     setShowModal(!showModal);
+    // };
 
     const clickImages = largeImage => {
         setLargeImage(largeImage);
-        toggleModal();
+        // toggleModal();
+        setShowModal();
     };
 
     return (
@@ -82,7 +84,7 @@ function App() {
                 )}
 
                 {showModal && (
-                    <Modal onModal={toggleModal}>
+                    <Modal onModal={setShowModal}>
                         {loadingSpinner && <LoaderSpinner />}
                         <img
                             src={largeImage.largeImageURL}
