@@ -3,7 +3,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import fetchPixaBayAPI from '../../Services/searchPicturesAPI';
 import Container from '../Container';
-import Searchbar from '../Searchbar';
+import Searchbar from '../SearchBar';
 import ImageGallery from '../ImageGallery';
 import LoaderSpinner from '../Loader';
 import Button from '../Button';
